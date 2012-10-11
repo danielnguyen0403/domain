@@ -1,0 +1,95 @@
+<?php
+
+/*
+ * @file
+ * Provides functions and callbacks for managing a form.
+ * 
+ */
+
+/*
+ * Implements hoonk_menu().
+ */
+function domain_menu() {
+  $item['domain'] = array(
+    'title' => 'Instruction for showing in your website',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('domain_page'),
+    'access callback' => TRUE,
+  );
+  
+  $item['domain/instruction'] = array(
+    'title' => 'Intruction',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('domain_instruction_page'),
+    'access callback' => TRUE,
+  );
+//  $node = node_load(4);
+//  $item['notfound'] = array(
+//    'title' => 'Page not found, neither is ' . $node->title,
+//    'page callback' => 'drupal_get_form',
+//    'page arguments' => array('domain_load_information'),
+//    'access callback' => TRUE,
+//  );
+  return $item;
+}
+
+function domain_init() {
+  drupal_add_css(drupal_get_path('module', 'domain') . '/css/domain.css');
+}
+
+
+/*
+ * Build the page for configuration Domain.
+ */
+function domain_page($form, &$form_state) {
+  $form['domain'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your domain'),
+    '#description' => t('As your benefit in the future, you should enter your domain exactly and fully'),
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}
+
+/**
+ * Submit function for saving the domain user enter form.
+ */
+function domain_page_submit($form, &$form_state) {
+  dpm($form_state);
+  $temp   = $form_state['values']['domain'];
+  $check  = db_select('list_domain', 'l');
+  $querry = db_insert('list_domain');
+  $querry->fields(array('domain_name'), array($temp));
+  $querry->execute();
+  drupal_set_message(t('Your domain have been saved'));
+  $form_state['redirect'] = 'domain/instruction';
+}
+
+/*
+ * Build the instruction page.
+ */
+function domain_instruction_page($form, &$form_state) {
+  $form['instruction'] = array(
+    '#type' => 'textarea',
+    '#title' => t('You can embed into your page 404 not found'),
+    '#description' => t('You follow this step...'),
+    '#default_value' => t('<iframe src="http://localhost/missing_people/people" width="100%" height="650" frameborder="0"></iframe>')
+  );
+  return $form;
+}
+
+//function domain_load_information() {
+//  // $node_path = explode('/', drupal_get_normal_path($path));
+//  // $nid = $node_path[1];
+//  $node = node_load(4);
+//  $form['Form']['Form_type'] = array(
+//  '#required' => '0',
+//  '#weight' => '0',
+//  '#type' => 'radios',
+//  '#options' => $node->body['und']['0']['value'],
+//  );
+//  return $form;
+//}

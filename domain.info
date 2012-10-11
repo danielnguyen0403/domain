@@ -1,0 +1,5 @@
+name = Domain Custom
+description = Provides form for entering domain and save it.
+core = 7.x
+package = domain Custom
+files[] = domain.module
