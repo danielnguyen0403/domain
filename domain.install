@@ -17,10 +17,11 @@ function domain_schema() {
     'description' => 'The domains are saved in this table.',
     'fields' => array(
       'domain_id' => array('type' => 'int', 'length' => 10, 'unsigned' => TRUE, 
-        'auto_increment' => TRUE, 'unique' => TRUE, 'index_type' => 'primary'),
+        'auto_increment' => TRUE),
       'domain_name' => array('type' => 'varchar', 'length' => '255',
         'colattion' => 'utf8_unicode_ci', 'index_type' => 'index'),
     ),
+    'primary key' => array('domain_id'),
   );
   return $schema;
 }
